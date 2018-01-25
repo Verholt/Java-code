@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<artifactId>master_data_service</artifactId>
+		<groupId>com.dsv.road</groupId>
+		<version>0-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>master_data_service-arquillian</artifactId>
+	<name>master_data_service Integration Tests</name>
+
+    <!-- Define variables that will be substituted in server.xml and passed
+        to the integration tests -->
+    <properties>
+        <httpPort>9091</httpPort>
+        <httpsPort>9453</httpsPort>
+    </properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.dsv.road</groupId>
+			<artifactId>master_data_service-ejb</artifactId>
+			<version>${project.version}</version>
+			<type>ejb</type>
+		</dependency>
+		<dependency>
+			<groupId>com.dsv.road</groupId>
+			<artifactId>master_data-shared</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.dsv.road</groupId>
+			<artifactId>master_data_service-import</artifactId>
+			<version>${project.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>com.ibm.tools.target</groupId>
+					<artifactId>was</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.arquillian.junit</groupId>
+			<artifactId>arquillian-junit-container</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.ibm.websphere.ws</groupId>
+			<artifactId>com.ibm.ws.prereq.jaxrs</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.ibm.websphere.ws</groupId>
+			<artifactId>com.ibm.ws.prereq.soap</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.assertj</groupId>
+			<artifactId>assertj-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.shrinkwrap.resolver</groupId>
+			<artifactId>shrinkwrap-resolver-depchain</artifactId>
+			<type>pom</type>
+			<scope>test</scope>
+		</dependency>
+		<!-- Cucumber -->
+		<dependency>
+			<groupId>info.cukes</groupId>
+			<artifactId>cucumber-java</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>info.cukes</groupId>
+			<artifactId>cucumber-junit</artifactId>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<!-- Prevent surefire from executing integration tests as unit tests -->
+				<configuration>
+					<skip>true</skip>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>copy</id>
+						<phase>pre-integration-test</phase>
+						<goals>
+							<goal>copy</goal>
+						</goals>
+						<configuration>
+							<artifactItems>
+								<artifactItem>
+									<groupId>com.dsv.road</groupId>
+									<artifactId>master_data_service-web</artifactId>
+									<version>${project.version}</version>
+									<type>war</type>
+									<overWrite>true</overWrite>
+									<outputDirectory>${project.basedir}/target/liberty/wlp/usr/servers/test/apps</outputDirectory>
+									<destFileName>master_data_service-web.war</destFileName>
+								</artifactItem>
+							</artifactItems>
+							<!-- other configurations here -->
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+	<profiles>
+		<profile>
+			<id>arquillian-wlp-managed</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<dependencies>
+				<dependency>
+					<groupId>org.jboss.arquillian.container</groupId>
+					<artifactId>arquillian-wlp-managed-8.5</artifactId>
+					<version>1.0.0.DSV-ERR-FIX</version>
+					<scope>test</scope>
+				</dependency>
+				<dependency>
+					<groupId>org.jboss.spec</groupId>
+					<artifactId>jboss-javaee-6.0</artifactId>
+					<version>1.0.0.Final</version>
+					<type>pom</type>
+					<scope>provided</scope>
+				</dependency>
+			</dependencies>
+			<build>
+				<!-- Enable resource filtering so that variables in server.xml get substituted -->
+				<testResources>
+					<testResource>
+						<directory>${project.basedir}/src/test/resources</directory>
+						<filtering>true</filtering>
+					</testResource>
+				</testResources>
+
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-resources-plugin</artifactId>
+						<configuration>
+							<nonFilteredFileExtensions>
+								<nonFilteredFileExtension>xlsx</nonFilteredFileExtension>
+							</nonFilteredFileExtensions>
+						</configuration>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-failsafe-plugin</artifactId>
+						<configuration>
+							<!-- Pass contextPath and httpPort to the integration tests -->
+							<systemPropertyVariables>
+								<contextPath>/customer_order_service-web</contextPath>
+								<httpPort>${httpPort}</httpPort>
+							</systemPropertyVariables>
+						</configuration>
+					</plugin>
+					<plugin>
+						<groupId>net.wasdev.wlp.maven.plugins</groupId>
+						<artifactId>liberty-maven-plugin</artifactId>
+						<configuration>
+							<assemblyArtifact>
+								<groupId>com.dsv.tools.ibm</groupId>
+								<artifactId>wlp-test-server</artifactId>
+								<version>1.0.0</version>
+								<type>zip</type>
+							</assemblyArtifact>
+							<serverName>test</serverName>
+							<configFile>${project.build.testOutputDirectory}/wlp/server.xml</configFile>
+						</configuration>
+						<executions>
+							<!-- Install server from maven -->
+							<execution>
+								<id>create-server</id>
+								<phase>pre-integration-test</phase>
+								<goals>
+									<goal>create-server</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+</project>

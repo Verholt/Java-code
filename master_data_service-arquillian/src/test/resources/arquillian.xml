@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<arquillian xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://jboss.org/schema/arquillian" xsi:schemaLocation="http://jboss.org/schema/arquillian http://jboss.org/schema/arquillian/arquillian_1_0.xsd">
+    <engine>
+        <property name="deploymentExportPath">target/</property>
+    </engine>
+    <container qualifier="websphere" default="true">
+        <configuration>
+            <property name="wlpHome">target/liberty/wlp</property>
+            <property name="serverName">test</property>
+            <property name="httpPort">${httpPort}</property>
+            <property name="serverStartTimeout">60</property>
+            <property name="appDeployTimeout">60</property>
+            <property name="javaVmArguments">-XX:MaxPermSize=256m</property>
+            <!--<property name="javaVmArguments">-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=7777</property>-->
+        </configuration>
+    </container>
+</arquillian>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.0"
+	xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
+	<persistence-unit name="master_data_service-ejb"
+		transaction-type="JTA">
+		<jta-data-source>jdbc/cwfmdataDS</jta-data-source>
+		<validation-mode>NONE</validation-mode>
+		<properties>
+		    <property name="openjpa.jdbc.Schema" value="MDATA"/>
+			<property name="javax.persistence.lock.timeout" value="30000"/>
+			<!--<property name="openjpa.jdbc.SynchronizeMappings" value="buildSchema(ForeignKeys=true)" />-->
+			<!-- property name="openjpa.Log" value="DefaultLevel=TRACE,SQL=TRACE" / -->
+			</properties>
+	</persistence-unit>
+</persistence>
+

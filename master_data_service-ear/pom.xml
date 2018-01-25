@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>master_data_service</artifactId>
+        <groupId>com.dsv.road</groupId>
+        <version>0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>master_data_service-ear</artifactId>
+    <packaging>ear</packaging>
+
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-ear-plugin</artifactId>
+                <configuration>
+                    <version>6</version>
+                    <defaultLibBundleDir>lib</defaultLibBundleDir>
+                    <finalName>${project.name}</finalName>
+                    <modules>
+                        <webModule>
+                            <groupId>com.dsv.road</groupId>
+                            <artifactId>master_data_service-web</artifactId>
+                            <bundleFileName>master_data_service-web.war</bundleFileName>
+                            <contextRoot>/master_data_service-web</contextRoot>
+                        </webModule>
+                    </modules>
+                    <archive>
+                        <manifest>
+                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.ibm.tools.target</groupId>
+            <artifactId>was</artifactId>
+            <type>pom</type>
+        </dependency>
+        <dependency>
+            <groupId>com.dsv.road</groupId>
+            <artifactId>master_data_service-ejb</artifactId>
+            <version>${project.version}</version>
+            <type>ejb</type>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>com.dsv.road</groupId>
+            <artifactId>master_data_service-web</artifactId>
+            <version>${project.version}</version>
+            <type>war</type>
+        </dependency>
+    </dependencies>
+
+    <profiles>
+        <profile>
+            <id>ws</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.orctom.mojo</groupId>
+                        <artifactId>was-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>deploy</id>
+                                <phase>install</phase>
+                                <goals>
+                                    <goal>deploy</goal>
+                                </goals>
+                                <configuration>
+                                    <wasHome>${env.WAS_HOME}</wasHome>
+                                    <applicationName>${project.name}</applicationName>
+                                    <host>${was.deploy.host}</host>
+                                    <node>${was.deploy.node}</node>
+                                    <user>${was.deploy.user}</user>
+                                    <virtualHost>${was.deploy.virtualHost}</virtualHost>
+                                    <server>${was.deploy.server}</server>
+                                    <cluster>${was.deploy.cluster}</cluster>
+                                    <port>${was.deploy.port}</port>
+                                    <password>${was.deploy.passwd}</password>
+                                    <failOnError>true</failOnError>
+                                    <restartAfterDeploy>false</restartAfterDeploy>
+                                    <javaoption>-Xms1024m -Xmx2048m</javaoption>
+                                    <script>was_deploy.py</script>
+                                    <verbose>true</verbose>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-enforcer-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>enforce-property</id>
+                                <goals>
+                                    <goal>enforce</goal>
+                                </goals>
+                                <configuration>
+                                    <rules combine.children="append">
+                                        <requireProperty>
+                                            <property>was.deploy.node</property>
+                                            <message>You must set a 'was.deploy.node' property! Preferably in ~/.m2/settings.xml</message>
+                                        </requireProperty>
+                                    </rules>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+</project>

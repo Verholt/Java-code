@@ -1,0 +1,22 @@
+master_data_service-web/.settings/
+.settings/
+
+.project
+master_data_service-ejb/.classpath
+master_data_service-ejb/.factorypath
+master_data_service-web/.classpath
+master_data_service-web/.factorypath
+master_data_service-web/nb-configuration.xml
+master_data_service-test/.classpath
+
+# IntelliJ Idea
+*.iml
+*/*.iml
+*.idea
+
+# JRebel
+src/main/resources/rebel.xml
+master_data_service-arquillian/logs/WebSphere_Portal/MasterData-arquillian.log
+master_data_service-ejb/logs/WebSphere_Portal/Masterdata.log
+master_data_service-ejb/src/main/resources/db/sql/reorg.sql
+master_data_service-arquillian/logs/WebSphere_Portal/MasterData.log

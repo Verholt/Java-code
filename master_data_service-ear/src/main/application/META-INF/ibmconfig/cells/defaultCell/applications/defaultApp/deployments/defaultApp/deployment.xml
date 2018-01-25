@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<appdeployment:Deployment xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:appdeployment="http://www.ibm.com/websphere/appserver/schemas/5.0/appdeployment.xmi" xmi:id="Deployment_1439480939447">
+<deployedObject xmi:type="appdeployment:ApplicationDeployment" xmi:id="ApplicationDeployment_1439480939447" startingWeight="1000">
+    <modules xmi:type="appdeployment:EJBModuleDeployment" xmi:id="EJBModuleDeployment_1441090543213" startingWeight="5000" uri="master_data_service-ejb.jar"/>
+    <modules xmi:type="appdeployment:WebModuleDeployment" xmi:id="WebModuleDeployment_1441090543213" startingWeight="10000" uri="master_data_service-web.war" classloaderMode="PARENT_LAST"/>
+    <classloader xmi:id="Classloader_1439480939447" mode="PARENT_LAST"/>
+</deployedObject>
+</appdeployment:Deployment>

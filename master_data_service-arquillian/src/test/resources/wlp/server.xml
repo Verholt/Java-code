@@ -1,0 +1,51 @@
+<server description="test server">
+
+    <!-- Enable features -->
+    <featureManager>
+		<feature>restConnector-1.0</feature>
+		<feature>jaxrs-1.1</feature>
+		<feature>jdbc-4.0</feature>
+		<feature>json-1.0</feature>
+		<feature>localConnector-1.0</feature>
+		<feature>ejbLite-3.1</feature>
+		<feature>servlet-3.0</feature>
+		<feature>jndi-1.0</feature>
+		<feature>cdi-1.0</feature>
+		<feature>jaxws-2.2</feature>
+		<feature>jaxb-2.2</feature>
+		<feature>beanValidation-1.0</feature>
+		<feature>jpa-2.0</feature>
+		<feature>jsf-2.0</feature>
+		<feature>jsp-2.2</feature>
+		<feature>webProfile-6.0</feature>
+	</featureManager>
+
+    <httpEndpoint id="defaultHttpEndpoint"
+                  host="localhost"
+                  httpPort="${httpPort}"
+                  httpsPort="${httpsPort}" />
+
+	<library id="DB2JCC4Lib">
+	    <fileset dir="${db.jdbcDriverPath}" includes="db2jcc4.jar db2jcc_license_cisuz.jar"/>
+	</library>
+	<dataSource id="db2" jndiName="jdbc/cwfmdataDS">
+	    <jdbcDriver libraryRef="DB2JCC4Lib"/>
+	    <properties.db2.jcc databaseName="${db.databaseName}" portNumber="${db.portNumber}" serverName="${db.serverName}" user="${db.user}" password="${db.password}"/>
+	</dataSource>
+
+    <applicationMonitor updateTrigger="mbean" />
+
+	<basicRegistry id="basic" realm="WebRealm"/>
+
+	<application autoStart="true" type="war" id="master_data_service" name="master_data_service" location="${server.config.dir}/apps/master_data_service-web.war" context-root="/master_data_service-web">
+	   <application-bnd>
+	       <security-role name="Administrator">
+	           <special-subject type="EVERYONE"/>
+	       </security-role>
+	       <security-role name="Reader">
+	           <special-subject type="EVERYONE"/>
+	       </security-role>
+	   </application-bnd>
+	</application>
+
+</server>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://dozer.sourceforge.net http://dozer.sourceforge.net/schema/beanmapping.xsd">
+	<configuration>
+		<custom-converters>
+			<converter type="com.dsv.shared.joda.dozer.DozerDateTimeAdapter">
+				<class-a>java.lang.String</class-a>
+				<class-b>org.joda.time.DateTime</class-b>
+			</converter>
+			<converter type="com.dsv.shared.joda.dozer.DozerLocalTimeAdapter">
+				<class-a>java.lang.String</class-a>
+				<class-b>org.joda.time.LocalTime</class-b>
+			</converter>
+			<converter type="com.dsv.shared.joda.dozer.DozerLocalDateAdapter">
+				<class-a>java.lang.String</class-a>
+				<class-b>org.joda.time.LocalDate</class-b>
+			</converter>
+			<converter type="com.dsv.shared.date.DozerDateAdapter">
+				<class-a>java.lang.String</class-a>
+				<class-b>java.util.Date</class-b>
+			</converter>
+		</custom-converters>
+	</configuration>
+</mappings>

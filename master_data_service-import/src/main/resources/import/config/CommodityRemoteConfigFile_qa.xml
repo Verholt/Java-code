@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<RemoteImportConfiguration>
+    <RestEndPoint>http://qa.roadshipment.dsv.com/master_data_service-web/rest/</RestEndPoint>
+    <ExcelFilePath>import/data/commoditiesEnglish.xlsx</ExcelFilePath>
+    <Settings>
+        <entry>
+            <key>language</key>
+            <value>en</value>
+        </entry>
+        <entry>
+            <key>createHsCodeTextsOnly</key>
+            <value>false</value>
+        </entry>
+    </Settings>
+</RemoteImportConfiguration>

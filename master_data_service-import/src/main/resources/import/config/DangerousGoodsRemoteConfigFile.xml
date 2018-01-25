@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<RemoteImportConfiguration>
+    <RestEndPoint>http://localhost:10039/master_data_service-web/rest</RestEndPoint>
+    <ExcelFilePath>src/main/resources/import/data/DangerousGoods.xlsx</ExcelFilePath>
+</RemoteImportConfiguration>
